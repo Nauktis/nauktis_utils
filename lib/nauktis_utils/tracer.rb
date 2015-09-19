@@ -1,7 +1,5 @@
 module NauktisUtils
 	class Tracer
-		include Logging
-
     def self.debug(message)
       log(Logger::DEBUG, message)
     end
@@ -23,7 +21,7 @@ module NauktisUtils
     end
 
 		def self.log(severity, message)
-      logger.add(severity, message, caller[1])
+      Logging.logger.add(severity, message, caller[1])
     end
 	end
 end
