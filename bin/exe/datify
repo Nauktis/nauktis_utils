@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+require 'nauktis_utils'
+
+puts "Datify tool."
+raise "First argument must be a file or a directory path." unless ARGV.size == 1
+date_extractor = Utils::DateExtractor.new
+if File.directory?(ARGV[0])
+	Utils::FileBrowser.each_file(ARGV[0]) do |entry|
+		begin
+			date_extractor.rename(entry)
+		rescue StandardError => e
+			puts "Error: #{e}"
+		end
+	end
+	puts "Processed #{date_extractor.counters[:total]} files"
+else
+	date_extractor.process(ARGV[0])
+end
