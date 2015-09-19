@@ -1,3 +1,5 @@
+require 'logger'
+
 module NauktisUtils
   # Logger module that can be included in classes
   module Logging
