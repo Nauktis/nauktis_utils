@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+require 'nauktis_utils'
+
+puts "Duplicates remover tool."
+raise "Two first arguments must be directory paths." unless ARGV.size == 2
+directory_delete = NauktisUtils::FileBrowser.ensure_valid_directory(ARGV[0])
+directory_keep = NauktisUtils::FileBrowser.ensure_valid_directory(ARGV[1])
+
+deleting_strategy = NauktisUtils::Duplicate::DeletingStrategy::Simple.new
+handling_strategy = NauktisUtils::Duplicate::HandlingStrategy::NoDeleteIn.new(deleting_strategy, directory_keep)
+puts "Deleting duplicates in #{directory_delete} if present in #{directory_keep}"
+
+NauktisUtils::Duplicate.new(handling_strategy).clean([directory_delete, directory_keep])

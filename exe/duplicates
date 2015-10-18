@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+require 'nauktis_utils'
+
+puts "Duplicates finder tool."
+raise "Provide directory paths to the command line." unless ARGV.size > 0
+
+directories = []
+ARGV.each do |dir|
+  directories << NauktisUtils::FileBrowser.ensure_valid_directory(dir)
+end
+
+handling_strategy = NauktisUtils::Duplicate::HandlingStrategy::Analyse.new
+puts "Finding duplicates in #{directories.join(', ')}"
+
+NauktisUtils::Duplicate.new(handling_strategy).clean(directories)
+puts "Analysis done."
+puts "#{handling_strategy.counters[:pairs]} pairs of duplicates found."
+puts "#{handling_strategy.counters[:duplicates]} files are duplicates and could be deleted."
+puts "#{handling_strategy.counters[:size]} of space could be save."
