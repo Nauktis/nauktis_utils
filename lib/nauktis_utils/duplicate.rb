@@ -1,6 +1,3 @@
-require 'fileutils'
-require 'find'
-
 module NauktisUtils
 	# Class to find and handle duplicate files.
   class Duplicate
@@ -133,16 +130,16 @@ module NauktisUtils
       logger.info "Searching duplicates in #{directories}"
       directories.map! { |d| File.expand_path(d) }
       files = files_in(directories)
-      logger.info "Number of files: #{files.size}"
+      logger.info "Number of files: #{files.size.to_s(:delimited)}"
       size_before = size_of(directories)
-      logger.info "Total size: #{size_before}"
+      logger.info "Total size: #{size_before.to_s(:human_size)}"
 
       @groupings = [GROUP_BY_SIZE, GROUP_BY_MD5, GROUP_BY_SHA3]
       multi_group_by(files, 0)
 
       size_after = size_of(directories)
-      logger.info "Total size: #{size_before}"
-      logger.info "Size reduced by #{(100 * (size_before - size_after) / size_before.to_f).round(2)}% (#{size_after}/#{size_before})"
+      logger.info "Total size: #{size_after.to_s(:human_size)}"
+      logger.info "Size reduced by #{(100 * (size_before - size_after) / size_before.to_f).round(2)}% (#{size_after.to_s(:delimited)}/#{size_before.to_s(:delimited)})"
     end
 
     private

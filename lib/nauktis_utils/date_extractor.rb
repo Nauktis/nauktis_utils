@@ -1,6 +1,3 @@
-require 'json'
-require 'date'
-
 module NauktisUtils
 	class DateExtractor
 		attr_reader :counters

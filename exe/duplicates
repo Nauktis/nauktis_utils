@@ -15,6 +15,6 @@ puts "Finding duplicates in #{directories.join(', ')}"
 
 NauktisUtils::Duplicate.new(handling_strategy).clean(directories)
 puts "Analysis done."
-puts "#{handling_strategy.counters[:pairs]} pairs of duplicates found."
-puts "#{handling_strategy.counters[:duplicates]} files are duplicates and could be deleted."
-puts "#{handling_strategy.counters[:size]} of space could be save."
+puts "#{handling_strategy.counters[:pairs].to_s(:delimited)} pairs of duplicates found."
+puts "#{handling_strategy.counters[:duplicates].to_s(:delimited)} files are duplicates and could be deleted."
+puts "#{handling_strategy.counters[:size].to_s(:human_size)} of space could be save."

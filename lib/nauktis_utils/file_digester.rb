@@ -1,6 +1,3 @@
-require 'openssl'
-require 'sha3'
-
 module NauktisUtils
 	module FileDigester
     ALGORITHMS = [:md5, :sha1, :sha256, :sha512, :sha3]
