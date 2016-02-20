@@ -9,6 +9,11 @@ OptionParser.new do |opts|
   opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
     options[:verbose] = v
   end
+
+  opts.on("-a", "--algorithms ALGORITHM", "Adds ALGORITHM to the list of algorithms to use.") do |al|
+    options[:algorithms] ||= []
+    options[:algorithms] << al
+  end
 end.parse!
 
 p options
