@@ -3,11 +3,18 @@ module NauktisUtils
   class Duplicate
     include Logging
 
-    GROUP_BY_NAME = proc { |file| File.basename(file).downcase }
-    GROUP_BY_SIZE = proc { |file| File.size(file) }
-    GROUP_BY_MD5 = proc { |file| FileDigester.digest(file, :md5) }
-    GROUP_BY_SHA1 = proc { |file| FileDigester.digest(file, :sha1) }
-    GROUP_BY_SHA3 = proc { |file| FileDigester.digest(file, :sha3) }
+    def self.algorithm(name)
+      key = name.to_sym
+      @@algorithms ||= {}
+      unless @@algorithms.has_key? key
+        @@algorithms[:name] = proc { |file| File.basename(file).downcase }
+        @@algorithms[:size] = proc { |file| File.size(file) }
+        @@algorithms[:md5] = proc { |file| FileDigester.digest(file, :md5) }
+        @@algorithms[:sha1] = proc { |file| FileDigester.digest(file, :sha1) }
+        @@algorithms[:sha3] = proc { |file| FileDigester.digest(file, :sha3) }
+      end
+      @@algorithms.fetch key
+    end
 
     # ========================================
     # Handling Strategies
@@ -134,12 +141,13 @@ module NauktisUtils
       size_before = size_of(directories)
       logger.info "Total size: #{size_before.to_s(:human_size)}"
 
-      @groupings = [GROUP_BY_SIZE, GROUP_BY_MD5, GROUP_BY_SHA3]
+      @groupings = [self.class.algorithm(:size), self.class.algorithm(:md5), self.class.algorithm(:sha3)]
       multi_group_by(files, 0)
 
       size_after = size_of(directories)
       logger.info "Total size: #{size_after.to_s(:human_size)}"
-      logger.info "Size reduced by #{(100 * (size_before - size_after) / size_before.to_f).round(2)}% (#{size_after.to_s(:delimited)}/#{size_before.to_s(:delimited)})"
+      reduction_ratio = (100 * (size_before - size_after) / size_before.to_f).round(2)
+      logger.info "Size reduced by #{reduction_ratio}% (#{size_after.to_s(:delimited)}/#{size_before.to_s(:delimited)})"
     end
 
     private
