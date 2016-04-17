@@ -2,6 +2,7 @@ module NauktisUtils
 	# Wrapper around TAR
 	class Archiver
 		include Logging
+		attr_reader :options
 
 		def initialize(&block)
 			@options = {
